@@ -6,13 +6,13 @@ Allows visualising many of the graphs seen on the Pi-Hole dashboard, in Grafana 
 
 A few environment variables are required to get this up and running.
 
-| Name | Default | Required | Description |
-| ---- | ------- | -------- | ----------- |
-| PI_HOLE_HOST | `localhost:8081` | Yes | Hostname & Port of your PiHole|
-| PI_HOLE_API_TOKEN | `<no default>` | Yes | API Token for accessing PiHole |
-| PI_HOLE_USE_HTTP | `false` | No | Set to true to connect to your PiHole over HTTP |
-| INFLUX_URL | `http://localhost:8086` | Yes | Schema, Hostname, & Port of your Influx Instance |
-| INFLUX_DATABASE | `metrics` | No | What Influx database to write into |
+| Name              | Default                 | Required | Description                                      |
+|-------------------|-------------------------|----------|--------------------------------------------------|
+| PI_HOLE_HOST      | `<no default>`          | Yes      | Hostname & Port of your PiHole                   |
+| PI_HOLE_API_TOKEN | `<no default>`          | Yes      | API Token for accessing PiHole                   |
+| PI_HOLE_USE_HTTP  | `false`                 | No       | Set to true to connect to your PiHole over HTTP  |
+| INFLUX_URL        | `http://localhost:8086` | Yes      | Schema, Hostname, & Port of your Influx Instance |
+| INFLUX_DATABASE   | `metrics`               | No       | What Influx database to write into               |
 
 ### Metrics
 
@@ -34,6 +34,8 @@ All metrics are tagged as `pi_hole_host` with the `PI_HOLE_HOST` value.
     - `domains_being_blocked` - int - Counter of all domains blocked by ad lists
     - `unique_clients` - int - How many distinct clients have been served by Pi Hole
     - `unique_domains` - int - How many distinct domains have been served by PI Hole
+
+---
 
 `pi_hole_top_sources`
 
