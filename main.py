@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import time
 
@@ -9,6 +11,9 @@ pi_hole_host = os.getenv("PI_HOLE_HOST", "localhost:8081")
 auth_token = os.getenv("PI_HOLE_API_TOKEN", "")
 influx_url = os.getenv("INFLUX_URL", "http://localhost:8086")
 influx_database = os.getenv("INFLUX_DATABASE", "metrics")
+
+if not auth_token:
+    raise RuntimeError("PI_HOLE_API_TOKEN not set!")
 
 
 def get_pihole_data() -> dict:
