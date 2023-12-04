@@ -1,0 +1,47 @@
+version: "1.0"
+
+steps:
+  - name: build image dry run
+    image: target/vela-kaniko:v0.13.0
+    parameters:
+      dry_run: true
+      repo: tjmapes/pihole-metrics
+      tags:
+        - dry_run
+    ruleset:
+      unless:
+        event: [ push, tag ]
+        branch: [ main ]
+
+  - name: build image snapshot
+    image: target/vela-kaniko:v0.13.0
+    secrets: [ docker_username, docker_password ]
+    parameters:
+      registry: https://index.docker.io/v1/
+      repo: tjmapes/pihole-metrics
+      tags:
+        - "b${VELA_BUILD_NUMBER}-${VELA_BUILD_COMMIT:0:8}"
+    ruleset:
+      event: push
+      branch: main
+
+  - name: build image
+    image: target/vela-kaniko:v0.13.0
+    secrets: [ docker_username, docker_password ]
+    parameters:
+      registry: https://index.docker.io/v1/
+      repo: tjmapes/pihole-metrics
+      tags:
+        - "${VELA_BUILD_TAG:##v}"
+    ruleset:
+      event: tag
+
+secrets:
+  - name: docker_username
+    type: org
+    key: tmapes/docker_username
+    engine: native
+  - name: docker_password
+    type: org
+    key: tmapes/docker_password
+    engine: native
