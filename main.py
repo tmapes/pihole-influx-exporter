@@ -32,6 +32,7 @@ def get_pihole_data() -> dict:
 
     resp = requests.get(url, params=query)
     if resp.status_code != 200:
+        print(f'pi-hole request failed with status: {resp.status_code} and body {resp.text}')
         return {}
     return resp.json()
 
@@ -133,4 +134,5 @@ def main():
 
 
 if __name__ == '__main__':
+    print(f'running against pi-hole host={pi_hole_host} and publishing to influx host={influx_url} db={influx_database}')
     main()
