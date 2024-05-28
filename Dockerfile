@@ -1,4 +1,4 @@
-FROM python:3.11.6-alpine3.18
+FROM python:3.11.6-alpine3.18@sha256:64bf6d40f8bbb4f7565642494bb267aa92f1ce1beade6c1a8a3581688abf7a52
 
 # install dumb-init
 RUN wget -qO /usr/local/bin/dumb-init https://binrepo.mapes.info/repository/github/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 \
