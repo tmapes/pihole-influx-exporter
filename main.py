@@ -4,26 +4,22 @@ import os
 import time
 
 import requests
+import urllib3
 
+import util
 from influx_metric import InfluxMetric
 
+_required_env_vars = ['PI_HOLE_API_TOKEN', 'INFLUX_ORG', 'INFLUX_BUCKET', 'INFLUX_TOKEN']
+for var in _required_env_vars:
+    util.ensure_var_set(var)
+
 pi_hole_host = os.getenv("PI_HOLE_HOST", "http://pi.hole")
+tag_pi_hole_host = urllib3.util.parse_url(pi_hole_host).host
 auth_token = os.getenv("PI_HOLE_API_TOKEN", "")
 influx_url = os.getenv("INFLUX_URL", "http://localhost:8086")
 influx_org = os.getenv("INFLUX_ORG", "")
 influx_bucket = os.getenv("INFLUX_BUCKET", "")
 influx_token = os.getenv("INFLUX_TOKEN", "")
-
-if not auth_token:
-    raise RuntimeError("PI_HOLE_API_TOKEN not set!")
-if not pi_hole_host:
-    raise RuntimeError("PI_HOLE_HOST not set!")
-if not influx_org:
-    raise RuntimeError("INFLUX_ORG not set!")
-if not influx_bucket:
-    raise RuntimeError("INFLUX_BUCKET not set!")
-if not influx_token:
-    raise RuntimeError("INFLUX_TOKEN not set!")
 
 
 def get_pihole_data() -> dict:
@@ -63,7 +59,7 @@ def main():
 
     # create the root pi_hole metric
     pi_hole_metric = InfluxMetric('pi_hole', timestamp) \
-        .with_tag('pi_hole_host', pi_hole_host) \
+        .with_tag('pi_hole_host', tag_pi_hole_host) \
         .with_field('ads_blocked_today', int(pihole_data["ads_blocked_today"])) \
         .with_field('ads_percentage_today', float(pihole_data["ads_percentage_today"])) \
         .with_field('queries_cached', int(pihole_data["queries_cached"])) \
@@ -81,7 +77,7 @@ def main():
     for top_source, count in pihole_data.get("top_sources", {}).items():
         [hostname, ip_address] = top_source.split('|')
         top_source_metric = InfluxMetric('pi_hole_top_sources', timestamp) \
-            .with_tag('pi_hole_host', pi_hole_host) \
+            .with_tag('pi_hole_host', tag_pi_hole_host) \
             .with_tag('host', hostname) \
             .with_tag('ip_address', ip_address) \
             .with_field('count', int(count))
@@ -91,7 +87,7 @@ def main():
     # create the 'pi_hole_query_types' metrics
     for query_type, percentage in pihole_data.get("querytypes", {}).items():
         query_type_metric = InfluxMetric('pi_hole_query_types', timestamp) \
-            .with_tag('pi_hole_host', pi_hole_host) \
+            .with_tag('pi_hole_host', tag_pi_hole_host) \
             .with_tag('type', query_type) \
             .with_field('percentage', float(percentage))
 
@@ -101,7 +97,7 @@ def main():
     for forward_destination, percentage in pihole_data.get("forward_destinations", {}).items():
         [hostname, ip_address] = forward_destination.split('|')
         top_source_metric = InfluxMetric('pi_hole_forward_destinations', timestamp) \
-            .with_tag('pi_hole_host', pi_hole_host) \
+            .with_tag('pi_hole_host', tag_pi_hole_host) \
             .with_tag('host', hostname) \
             .with_tag('ip_address', ip_address) \
             .with_field('percentage', float(percentage))
@@ -111,7 +107,7 @@ def main():
     # create the 'pi_hole_top_ads' metrics
     for host, count in pihole_data.get("top_ads", {}).items():
         query_type_metric = InfluxMetric('pi_hole_top_ads', timestamp) \
-            .with_tag('pi_hole_host', pi_hole_host) \
+            .with_tag('pi_hole_host', tag_pi_hole_host) \
             .with_tag('host', host) \
             .with_field('count', int(count))
 
@@ -120,7 +116,7 @@ def main():
     # create the 'pi_hole_top_queries' metrics
     for host, count in pihole_data.get("top_queries", {}).items():
         query_type_metric = InfluxMetric('pi_hole_top_queries', timestamp) \
-            .with_tag('pi_hole_host', pi_hole_host) \
+            .with_tag('pi_hole_host', tag_pi_hole_host) \
             .with_tag('host', host) \
             .with_field('count', int(count))
 
@@ -128,7 +124,7 @@ def main():
 
     # create the 'pi_hole_gravity' metric
     gravity_metric = InfluxMetric('pi_hole_gravity', timestamp) \
-        .with_tag('pi_hole_host', pi_hole_host) \
+        .with_tag('pi_hole_host', tag_pi_hole_host) \
         .with_field('updated', int(pihole_data["gravity_last_updated"]["absolute"]))
 
     metric_points.append(gravity_metric)
