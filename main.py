@@ -7,7 +7,7 @@ import requests
 
 from influx_metric import InfluxMetric
 
-pi_hole_host = os.getenv("PI_HOLE_HOST", "")
+pi_hole_host = os.getenv("PI_HOLE_HOST", "http://pi.hole")
 auth_token = os.getenv("PI_HOLE_API_TOKEN", "")
 influx_url = os.getenv("INFLUX_URL", "http://localhost:8086")
 influx_database = os.getenv("INFLUX_DATABASE", "metrics")
@@ -19,11 +19,7 @@ if not pi_hole_host:
 
 
 def get_pihole_data() -> dict:
-    scheme = "https://"
-    if os.getenv("PI_HOLE_USE_HTTP", "false").lower()[0] == "t":
-        scheme = "http://"
-
-    url = f'{scheme}{pi_hole_host}/api.php'
+    url = f'{pi_hole_host}/api.php'
     query = {
         'auth': auth_token,
         'summaryRaw': '', 'overTimeData': '', 'topItems': '', 'recentItems': '',

@@ -8,9 +8,8 @@ A few environment variables are required to get this up and running.
 
 | Name              | Default                 | Required | Description                                      |
 |-------------------|-------------------------|----------|--------------------------------------------------|
-| PI_HOLE_HOST      | `<no default>`          | Yes      | Hostname & Port of your PiHole                   |
+| PI_HOLE_HOST      | `http://pi.hole`        | Yes      | Hostname & Port of your PiHole                   |
 | PI_HOLE_API_TOKEN | `<no default>`          | Yes      | API Token for accessing PiHole                   |
-| PI_HOLE_USE_HTTP  | `false`                 | No       | Set to true to connect to your PiHole over HTTP  |
 | INFLUX_URL        | `http://localhost:8086` | Yes      | Schema, Hostname, & Port of your Influx Instance |
 | INFLUX_DATABASE   | `metrics`               | No       | What Influx database to write into               |
 
