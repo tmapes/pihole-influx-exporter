@@ -3,25 +3,27 @@
 Allows visualising many of the graphs seen on the Pi-Hole dashboard, in Grafana for an expanded historical view of your
 DNS metrics.
 
+Note, this requires using an Influx Database running v2. It is **NOT** compatible with Influx v1.
+
 ### Configuration
 
 A few environment variables are required to get this up and running.
 
-| Name               | Default                 | Required | Description                                      |
-|--------------------|-------------------------|----------|--------------------------------------------------|
-| PI_HOLE_HOST       | `http://pi.hole`        | Yes      | Hostname & Port of your PiHole                   |
-| PI_HOLE_API_TOKEN  | ``                      | Yes      | API Token for accessing PiHole                   |
-| INFLUX_URL         | `http://localhost:8086` | Yes      | Schema, Hostname, & Port of your Influx Instance |
-| INFLUX_ORG         | ``                      | Yes      | What Influx organization to write into           |
-| INFLUX_BUCKET      | ``                      | Yes      | What Influx bucket to write into                 |
-| INFLUX_TOKEN       | ``                      | Yes      | What Influx token to use for authentication      |
-| INFLUX_ENABLE_GZIP | `true`                  | No       | Enable GZIP body compression for Influx Requests |
+| Name               | Default                 | Required | Description                                         |
+|--------------------|-------------------------|----------|-----------------------------------------------------|
+| PI_HOLE_HOST       | `http://pi.hole`        | Yes      | Hostname & Port of your PiHole                      |
+| PI_HOLE_API_TOKEN  | ``                      | Yes      | API Token for accessing PiHole                      |
+| INFLUX_URL         | `http://localhost:8086` | Yes      | Schema, Hostname, & Port of your Influx v2 Instance |
+| INFLUX_ORG         | ``                      | Yes      | What Influx organization to write into              |
+| INFLUX_BUCKET      | ``                      | Yes      | What Influx bucket to write into                    |
+| INFLUX_TOKEN       | ``                      | Yes      | What Influx token to use for authentication         |
+| INFLUX_ENABLE_GZIP | `true`                  | No       | Enable GZIP body compression for Influx Requests    |
 
 ### Metrics
 
 Below are the metrics that are created from this repository.
 
-All metrics are tagged as `pi_hole_host` with the `PI_HOLE_HOST` value.
+All metrics are tagged as `pi_hole_host` with the host value from the `PI_HOLE_HOST` URI.
 
 `pi_hole`
 
