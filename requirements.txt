@@ -1,2 +1,2 @@
 --index-url https://binrepo.mapes.info/repository/pypi/simple
-requests==2.32.2
+requests==2.32.3
