@@ -7,14 +7,15 @@ DNS metrics.
 
 A few environment variables are required to get this up and running.
 
-| Name              | Default                 | Required | Description                                      |
-|-------------------|-------------------------|----------|--------------------------------------------------|
-| PI_HOLE_HOST      | `http://pi.hole`        | Yes      | Hostname & Port of your PiHole                   |
-| PI_HOLE_API_TOKEN | ``                      | Yes      | API Token for accessing PiHole                   |
-| INFLUX_URL        | `http://localhost:8086` | Yes      | Schema, Hostname, & Port of your Influx Instance |
-| INFLUX_ORG        | ``                      | Yes      | What Influx organization to write into           |
-| INFLUX_BUCKET     | ``                      | Yes      | What Influx bucket to write into                 |
-| INFLUX_TOKEN      | ``                      | Yes      | What Influx token to use for authentication      |
+| Name               | Default                 | Required | Description                                      |
+|--------------------|-------------------------|----------|--------------------------------------------------|
+| PI_HOLE_HOST       | `http://pi.hole`        | Yes      | Hostname & Port of your PiHole                   |
+| PI_HOLE_API_TOKEN  | ``                      | Yes      | API Token for accessing PiHole                   |
+| INFLUX_URL         | `http://localhost:8086` | Yes      | Schema, Hostname, & Port of your Influx Instance |
+| INFLUX_ORG         | ``                      | Yes      | What Influx organization to write into           |
+| INFLUX_BUCKET      | ``                      | Yes      | What Influx bucket to write into                 |
+| INFLUX_TOKEN       | ``                      | Yes      | What Influx token to use for authentication      |
+| INFLUX_ENABLE_GZIP | `true`                  | No       | Enable GZIP body compression for Influx Requests |
 
 ### Metrics
 

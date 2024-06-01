@@ -20,6 +20,17 @@ influx_url = os.getenv("INFLUX_URL", "http://localhost:8086")
 influx_org = os.getenv("INFLUX_ORG", "")
 influx_bucket = os.getenv("INFLUX_BUCKET", "")
 influx_token = os.getenv("INFLUX_TOKEN", "")
+influx_enable_gzip = os.getenv("INFLUX_ENABLE_GZIP", "true").lower() == "true"
+
+
+def _get_session() -> requests.sessions.Session:
+    s = requests.session()
+    if influx_enable_gzip:
+        import CompressionAdapter
+        c = CompressionAdapter.CompressionAdapter()
+        for scheme in CompressionAdapter.COMPRESSION_SCHEMES:
+            s.mount(scheme, c)
+    return s
 
 
 def get_pihole_data() -> dict:
@@ -39,10 +50,10 @@ def get_pihole_data() -> dict:
 
 def send_metrics(metrics: list[InfluxMetric]):
     url = influx_url + '/api/v2/write'
-    headers = {'content-type': 'text/plain', 'Authorization': f'Token {influx_token}'}
+    headers = {'content-type': 'text/plain; charset=utf-8', 'Authorization': f'Token {influx_token}'}
     body = '\n'.join(str(mp) for mp in metrics)
     query = {'org': influx_org, 'bucket': influx_bucket, 'precision': 'ns'}
-    resp = requests.post(url, headers=headers, data=body, params=query)
+    resp = _get_session().post(url, headers=headers, data=body, params=query)
     if resp.status_code != 204:
         print(resp.status_code, resp, resp.text)
 
