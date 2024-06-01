@@ -1,6 +1,7 @@
 # pihole-influx-exporter
 
-Allows visualising many of the graphs seen on the Pi-Hole dashboard, in Grafana for an expanded historical view of your DNS metrics. 
+Allows visualising many of the graphs seen on the Pi-Hole dashboard, in Grafana for an expanded historical view of your
+DNS metrics.
 
 ### Configuration
 
@@ -21,8 +22,8 @@ All metrics are tagged as `pi_hole_host` with the `PI_HOLE_HOST` value.
 
 `pi_hole`
 
-  - No Tags
-  - Fields:
+- No Tags
+- Fields:
     - `ads_blocked_today` - int - Incrementing counter of # of ads blocked today
     - `ads_percentage_today` - float - (0.0 - 100.0) % of how many DNS requests were blocked due to being on an ad list
     - `queries_cached` - int - How many queries were served from the cache
@@ -38,53 +39,53 @@ All metrics are tagged as `pi_hole_host` with the `PI_HOLE_HOST` value.
 
 `pi_hole_top_sources`
 
-  - Tags:
+- Tags:
     - `host` - string - Hostname of the client
     - `ip_address` - string - IP addres of the client
-  - Fields:
+- Fields:
     - `count` - int - Incrementing count of DNS requests from this client
 
 ---
 
 `pi_hole_query_types`
 
-  - Tags:
+- Tags:
     - `type` - string - Type of DNS request (A, AAAA, etc...)
-  - Fields:
+- Fields:
     - `percentage` - float (0.0 -100.00) - Percent of total DNS requests are of this type
 
 ---
 
 `pi_hole_forward_destinations`
 
-  - Tags:
+- Tags:
     - `host` - string - Hostname of the upstream dns server
     - `ip_address` - string - IP addres of the upstream dns server
-  - Fields:
-    - `percentage` - float (0.0 -100.00) - Percent of upstream DNS requests sent to this server 
+- Fields:
+    - `percentage` - float (0.0 -100.00) - Percent of upstream DNS requests sent to this server
 
 ---
 
 `pi_hole_top_ads`
 
-  - Tags:
+- Tags:
     - `host` - string - Hostname of the blocked ad
-  - Fields:
+- Fields:
     - `count` - int - Incrementing count of DNS requests for this blocked ad
 
 ---
 
 `pi_hole_top_queries`
 
-  - Tags:
+- Tags:
     - `host` - string - Hostname of the client
-  - Fields:
+- Fields:
     - `count` - int - Incrementing count of DNS requests for this client
 
 ---
 
 `pi_hole_gravity`
 
-  - No Tags
-  - Fields:
+- No Tags
+- Fields:
     - `updated` - int - Millisecond Epoch timestamp when the gravity file was last updated
