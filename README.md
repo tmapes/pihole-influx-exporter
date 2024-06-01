@@ -10,9 +10,11 @@ A few environment variables are required to get this up and running.
 | Name              | Default                 | Required | Description                                      |
 |-------------------|-------------------------|----------|--------------------------------------------------|
 | PI_HOLE_HOST      | `http://pi.hole`        | Yes      | Hostname & Port of your PiHole                   |
-| PI_HOLE_API_TOKEN | `<no default>`          | Yes      | API Token for accessing PiHole                   |
+| PI_HOLE_API_TOKEN | ``                      | Yes      | API Token for accessing PiHole                   |
 | INFLUX_URL        | `http://localhost:8086` | Yes      | Schema, Hostname, & Port of your Influx Instance |
-| INFLUX_DATABASE   | `metrics`               | No       | What Influx database to write into               |
+| INFLUX_ORG        | ``                      | Yes      | What Influx organization to write into           |
+| INFLUX_BUCKET     | ``                      | Yes      | What Influx bucket to write into                 |
+| INFLUX_TOKEN      | ``                      | Yes      | What Influx token to use for authentication      |
 
 ### Metrics
 

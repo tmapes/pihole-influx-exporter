@@ -10,16 +10,24 @@ from influx_metric import InfluxMetric
 pi_hole_host = os.getenv("PI_HOLE_HOST", "http://pi.hole")
 auth_token = os.getenv("PI_HOLE_API_TOKEN", "")
 influx_url = os.getenv("INFLUX_URL", "http://localhost:8086")
-influx_database = os.getenv("INFLUX_DATABASE", "metrics")
+influx_org = os.getenv("INFLUX_ORG", "")
+influx_bucket = os.getenv("INFLUX_BUCKET", "")
+influx_token = os.getenv("INFLUX_TOKEN", "")
 
 if not auth_token:
     raise RuntimeError("PI_HOLE_API_TOKEN not set!")
 if not pi_hole_host:
     raise RuntimeError("PI_HOLE_HOST not set!")
+if not influx_org:
+    raise RuntimeError("INFLUX_ORG not set!")
+if not influx_bucket:
+    raise RuntimeError("INFLUX_BUCKET not set!")
+if not influx_token:
+    raise RuntimeError("INFLUX_TOKEN not set!")
 
 
 def get_pihole_data() -> dict:
-    url = f'{pi_hole_host}/api.php'
+    url = f'{pi_hole_host}/admin/api.php'
     query = {
         'auth': auth_token,
         'summaryRaw': '', 'overTimeData': '', 'topItems': '', 'recentItems': '',
@@ -28,16 +36,16 @@ def get_pihole_data() -> dict:
 
     resp = requests.get(url, params=query)
     if resp.status_code != 200:
-        print(f'pi-hole request failed with status: {resp.status_code} and body {resp.text}')
+        print(f'pi-hole request to "{url}" failed with status: {resp.status_code} and body {resp.text}')
         return {}
     return resp.json()
 
 
 def send_metrics(metrics: list[InfluxMetric]):
-    url = influx_url + '/write'
-    headers = {'content-type': 'text/plain'}
+    url = influx_url + '/api/v2/write'
+    headers = {'content-type': 'text/plain', 'Authorization': f'Token {influx_token}'}
     body = '\n'.join(str(mp) for mp in metrics)
-    query = {'db': influx_database, 'precision': 'ns'}
+    query = {'org': influx_org, 'bucket': influx_bucket, 'precision': 'ns'}
     resp = requests.post(url, headers=headers, data=body, params=query)
     if resp.status_code != 204:
         print(resp.status_code, resp, resp.text)
@@ -130,5 +138,5 @@ def main():
 
 
 if __name__ == '__main__':
-    print(f'running against pi-hole host={pi_hole_host} and publishing to influx host={influx_url} db={influx_database}')
+    print(f'running against pi-hole host={pi_hole_host} and publishing to influx host={influx_url} org={influx_org} bucket={influx_bucket}')
     main()
